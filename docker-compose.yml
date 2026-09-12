@@ -1,0 +1,27 @@
+services:
+  postgres:
+    image: postgis/postgis:16-3.5
+    container_name: gidromonitor
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: gidromonitor
+      POSTGRES_PASSWORD: gidromonitor
+      POSTGRES_DB: gidromonitor-backend
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: my_pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+
+volumes:
+  postgres_data:
