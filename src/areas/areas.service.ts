@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from "@nestjs/common";
+import {
+    BadRequestException,
+    Injectable,
+    NotFoundException,
+} from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 
@@ -14,10 +18,9 @@ export class AreasService {
     ) {}
 
     async create(createAreaDto: CreateAreaDto): Promise<Area> {
-        
         if (createAreaDto.dateBefore >= createAreaDto.dateAfter) {
             throw new BadRequestException(
-                "dateBefore must be earlier than dateAfter",
+                "Начальная дата должна быть раньше конечной даты",
             );
         }
 
@@ -29,5 +32,25 @@ export class AreasService {
         });
 
         return this.areaRepository.save(area);
+    }
+
+    async findAll(): Promise<Area[]> {
+        return this.areaRepository.find({
+            order: {
+                createdAt: "DESC",
+            },
+        });
+    }
+
+    async findOne(id: string): Promise<Area> {
+        const area = await this.areaRepository.findOne({
+            where: { id },
+        });
+
+        if (!area) {
+            throw new NotFoundException("Территория не найдена");
+        }
+
+        return area;
     }
 }

@@ -6,8 +6,10 @@ import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
     const swaggerConfig = new DocumentBuilder()
-        .setTitle("Gidromonitor API")
-        .setDescription("API for monitoring areas and Earth observation data")
+        .setTitle("API Гидромонитора")
+        .setDescription(
+            "API для мониторинга территорий и данных наблюдения Земли",
+        )
         .setVersion("1.0")
         .build();
     const swaggerDocument = SwaggerModule.createDocument(app, swaggerConfig);

@@ -4,7 +4,7 @@ import { ApiProperty } from "@nestjs/swagger";
 export class CreateAreaDto {
     @IsObject()
     @ApiProperty({
-        description: "GeoJSON Polygon geometry in WGS 84 coordinates",
+        description: "Геометрия полигона GeoJSON в координатах WGS 84",
         example: {
             type: "Polygon",
             coordinates: [
@@ -23,10 +23,18 @@ export class CreateAreaDto {
     };
 
     @IsDateString()
-    @ApiProperty({ example: "2026-01-01", format: "date" })
+    @ApiProperty({
+        description: "Начальная дата периода",
+        example: "2026-01-01",
+        format: "date",
+    })
     dateBefore!: string;
 
     @IsDateString()
-    @ApiProperty({ example: "2026-01-31", format: "date" })
+    @ApiProperty({
+        description: "Конечная дата периода",
+        example: "2026-01-31",
+        format: "date",
+    })
     dateAfter!: string;
 }

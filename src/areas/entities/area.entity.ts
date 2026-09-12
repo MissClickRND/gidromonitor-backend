@@ -12,7 +12,11 @@ import { AreaStatus } from "../enums/area-status.enum";
 @Entity("areas")
 export class Area {
     @PrimaryGeneratedColumn("uuid")
-    @ApiProperty({ format: "uuid", readOnly: true })
+    @ApiProperty({
+        description: "Уникальный идентификатор территории",
+        format: "uuid",
+        readOnly: true,
+    })
     id!: string;
 
     @Column({
@@ -20,19 +24,27 @@ export class Area {
         spatialFeatureType: "Polygon",
         srid: 4326,
     })
-    @ApiProperty({ description: "GeoJSON Polygon geometry" })
+    @ApiProperty({ description: "Геометрия полигона GeoJSON" })
     geometry!: object;
 
     @Column({
         type: "date",
     })
-    @ApiProperty({ example: "2026-01-01", format: "date" })
+    @ApiProperty({
+        description: "Начальная дата периода",
+        example: "2026-01-01",
+        format: "date",
+    })
     dateBefore!: string;
 
     @Column({
         type: "date",
     })
-    @ApiProperty({ example: "2026-01-31", format: "date" })
+    @ApiProperty({
+        description: "Конечная дата периода",
+        example: "2026-01-31",
+        format: "date",
+    })
     dateAfter!: string;
 
     @Column({
@@ -40,14 +52,26 @@ export class Area {
         enum: AreaStatus,
         default: AreaStatus.PROCESSING,
     })
-    @ApiProperty({ enum: AreaStatus, example: AreaStatus.PROCESSING })
+    @ApiProperty({
+        description: "Статус обработки территории",
+        enum: AreaStatus,
+        example: AreaStatus.PROCESSING,
+    })
     status!: AreaStatus;
 
     @CreateDateColumn()
-    @ApiProperty({ format: "date-time", readOnly: true })
+    @ApiProperty({
+        description: "Дата создания",
+        format: "date-time",
+        readOnly: true,
+    })
     createdAt!: Date;
 
     @UpdateDateColumn()
-    @ApiProperty({ format: "date-time", readOnly: true })
+    @ApiProperty({
+        description: "Дата последнего обновления",
+        format: "date-time",
+        readOnly: true,
+    })
     updatedAt!: Date;
 }
