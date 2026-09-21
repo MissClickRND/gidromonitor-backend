@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AreasModule } from './areas/areas.module';
 import { join } from 'node:path';
+import { StorageModule } from './storage/storage.module';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { join } from 'node:path';
     }),
 
     AreasModule,
+    StorageModule,
   ],
   controllers: [AppController],
   providers: [AppService],

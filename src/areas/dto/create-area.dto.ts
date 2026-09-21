@@ -1,10 +1,19 @@
-import { IsDateString, IsObject } from "class-validator";
+import { IsDateString, IsObject, IsString } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
 
 export class CreateAreaDto {
+    @IsString()
+    @ApiProperty({
+        description: "Название территории",
+        example: "Участок в Московской области",
+    })
+    name!: string;
+
     @IsObject()
     @ApiProperty({
         description: "Геометрия полигона GeoJSON в координатах WGS 84",
+        type: "object",
+        additionalProperties: true,
         example: {
             type: "Polygon",
             coordinates: [
@@ -24,17 +33,17 @@ export class CreateAreaDto {
 
     @IsDateString()
     @ApiProperty({
-        description: "Начальная дата периода",
-        example: "2026-01-01",
-        format: "date",
+        description: "Начало периода в формате ISO 8601 с часовым поясом",
+        example: "2026-01-01T00:00:00.000Z",
+        format: "date-time",
     })
     dateBefore!: string;
 
     @IsDateString()
     @ApiProperty({
-        description: "Конечная дата периода",
-        example: "2026-01-31",
-        format: "date",
+        description: "Конец периода в формате ISO 8601 с часовым поясом",
+        example: "2026-01-31T23:59:59.999Z",
+        format: "date-time",
     })
     dateAfter!: string;
 }

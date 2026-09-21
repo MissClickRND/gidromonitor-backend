@@ -19,31 +19,49 @@ export class Area {
     })
     id!: string;
 
+    @Column()
+    @ApiProperty({
+        description: "Название территории",
+        example: "Участок в Московской области",
+    })
+    name!: string;
+
     @Column({
         type: "geometry",
         spatialFeatureType: "Polygon",
         srid: 4326,
     })
-    @ApiProperty({ description: "Геометрия полигона GeoJSON" })
+    @ApiProperty({
+        description: "Геометрия полигона GeoJSON",
+        type: "object",
+        additionalProperties: true,
+        example: {
+            type: "Polygon",
+            coordinates: [
+                [
+                    [37.6, 55.7],
+                    [37.7, 55.7],
+                    [37.7, 55.8],
+                    [37.6, 55.7],
+                ],
+            ],
+        },
+    })
     geometry!: object;
 
-    @Column({
-        type: "date",
-    })
+    @Column({ type: "timestamptz" })
     @ApiProperty({
-        description: "Начальная дата периода",
-        example: "2026-01-01",
-        format: "date",
+        description: "Начало периода в формате ISO 8601 с часовым поясом",
+        example: "2026-01-01T00:00:00.000Z",
+        format: "date-time",
     })
     dateBefore!: string;
 
-    @Column({
-        type: "date",
-    })
+    @Column({ type: "timestamptz" })
     @ApiProperty({
-        description: "Конечная дата периода",
-        example: "2026-01-31",
-        format: "date",
+        description: "Конец периода в формате ISO 8601 с часовым поясом",
+        example: "2026-01-31T23:59:59.999Z",
+        format: "date-time",
     })
     dateAfter!: string;
 

@@ -25,6 +25,7 @@ export class AreasService {
         }
 
         const area = this.areaRepository.create({
+            name: createAreaDto.name,
             geometry: createAreaDto.geometry,
             dateBefore: createAreaDto.dateBefore,
             dateAfter: createAreaDto.dateAfter,
