@@ -29,7 +29,7 @@ export class Area {
     @Column({
         type: "geometry",
         spatialFeatureType: "Polygon",
-        srid: 4326,
+        srid: 32652,
     })
     @ApiProperty({
         description: "Геометрия полигона GeoJSON",
