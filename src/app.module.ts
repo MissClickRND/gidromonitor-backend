@@ -6,6 +6,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AreasModule } from './areas/areas.module';
 import { join } from 'node:path';
 import { StorageModule } from './storage/storage.module';
+import { AirflowModule } from './airflow/airflow.module';
 
 @Module({
   imports: [
@@ -40,6 +41,7 @@ import { StorageModule } from './storage/storage.module';
 
     AreasModule,
     StorageModule,
+    AirflowModule,
   ],
   controllers: [AppController],
   providers: [AppService],

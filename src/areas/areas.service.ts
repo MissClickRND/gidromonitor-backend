@@ -2,6 +2,7 @@ import {
     BadRequestException,
     Injectable,
     NotFoundException,
+    ServiceUnavailableException,
 } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
@@ -9,12 +10,14 @@ import { Repository } from "typeorm";
 import { Area } from "./entities/area.entity";
 import { CreateAreaDto } from "./dto/create-area.dto";
 import { AreaStatus } from "./enums/area-status.enum";
+import { AirflowService } from "src/airflow/airflow.service";
 
 @Injectable()
 export class AreasService {
     constructor(
         @InjectRepository(Area)
         private readonly areaRepository: Repository<Area>,
+        private readonly airflowService: AirflowService,
     ) {}
 
     async create(createAreaDto: CreateAreaDto): Promise<Area> {
@@ -57,7 +60,32 @@ export class AreasService {
             ],
         );
 
-        return result[0];
+        const area = result[0];
+
+        try {
+            await this.airflowService.startGeospatialExport(
+                area.id,
+                createAreaDto.geometry,
+                createAreaDto.dateBefore,
+                createAreaDto.dateAfter,
+            );
+        } catch (error) {
+            console.error("AIRFLOW ERROR:", error);
+            await this.areaRepository.query(
+                `
+            UPDATE areas
+            SET "status" = $1
+            WHERE "id" = $2
+            `,
+                [AreaStatus.FAILED, area.id],
+            );
+
+            throw new ServiceUnavailableException(
+                "Не удалось запустить обработку территории",
+            );
+        }
+
+        return area;
     }
 
     async findAll(): Promise<Area[]> {
